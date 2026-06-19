@@ -187,7 +187,7 @@ export function Home() {
         </div>
         <div className="flex gap-12 animate-marquee">
           {[...partners, ...partners].map((partner, idx) => (
-            <div key={idx} className="flex-shrink-0 text-2xl font-bold text-gray-400 dark:text-gray-600 whitespace-nowrap">
+            <div key={`${partner}-${idx}`} className="flex-shrink-0 text-2xl font-bold text-gray-400 dark:text-gray-600 whitespace-nowrap">
               {partner}
             </div>
           ))}
