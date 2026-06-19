@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 import { Navbar } from './components/Navbar'
@@ -17,7 +22,9 @@ import { Donate } from './pages/Donate'
 import { Contact } from './pages/Contact'
 import { Admin } from './pages/Admin'
 
-export function App() {
+function AppContent() {
+  const location = useLocation()
+
   useEffect(() => {
     // Initialize EmailJS
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
@@ -27,28 +34,34 @@ export function App() {
   }, [])
 
   return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-grow pt-16">
+        <AnimatePresence mode="wait" initial={false}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/programs" element={<Programs />} />
+            <Route path="/programs/:id" element={<ProgramDetail />} />
+            <Route path="/volunteer" element={<Volunteer />} />
+            <Route path="/stories" element={<Stories />} />
+            <Route path="/stories/:slug" element={<StoryDetail />} />
+            <Route path="/donate" element={<Donate />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+        </AnimatePresence>
+      </main>
+      <Footer />
+      <ChatBot />
+    </div>
+  )
+}
+
+export function App() {
+  return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow pt-16">
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/programs" element={<Programs />} />
-              <Route path="/programs/:id" element={<ProgramDetail />} />
-              <Route path="/volunteer" element={<Volunteer />} />
-              <Route path="/stories" element={<Stories />} />
-              <Route path="/stories/:slug" element={<StoryDetail />} />
-              <Route path="/donate" element={<Donate />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/admin" element={<Admin />} />
-            </Routes>
-          </AnimatePresence>
-        </main>
-        <Footer />
-        <ChatBot />
-      </div>
+      <AppContent />
     </Router>
   )
 }
